@@ -18,14 +18,14 @@ def find_word(word:str):
     
     return 
 
-def select_word(char:str):
+def selectFirst(charFirst:str):
     connection = sqlite3.connect("Vocabulary.db", check_same_thread=False)
     cur = connection.cursor()
     
     #tìm tất cả các từ khi chỉ có chữ cái đầu 
     dataDB = cur.execute(
         f"""
-        SELECT * FROM Vocabulary WHERE word LIKE '{char}%' AND word NOT LIKE '% %'
+        SELECT * FROM Vocabulary WHERE word LIKE '{charFirst}%' AND word NOT LIKE '% %'
         ORDER BY RANDOM() LIMIT 1;
         """
     )
@@ -35,3 +35,18 @@ def select_word(char:str):
     return data if data else None
 
 
+def selectOut(charOut:str):
+    connection = sqlite3.connect("Vocabulary.db", check_same_thread=False)
+    cur = connection.cursor()
+    
+    #tìm tất cả các từ khi chỉ có chữ cái đầu 
+    dataDB = cur.execute(
+        f"""
+        SELECT * FROM Vocabulary WHERE word LIKE '%{charOut}' AND word NOT LIKE '% %'
+        ORDER BY RANDOM() LIMIT 1;
+        """
+    )
+
+    data = dataDB.fetchone()
+
+    return data if data else None

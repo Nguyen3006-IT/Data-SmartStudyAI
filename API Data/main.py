@@ -1,7 +1,7 @@
 from flask import Flask, request, jsonify
 from irregular import irregular_search
 from chemistry import chemistry_search
-from engWords import find_word, select_word
+from engWords import find_word, selectFirst, selectOut
 
 app = Flask("__name__")
 
@@ -52,15 +52,23 @@ def vocabulary():
 
 
 
-@app.route("/matchEng", methods=["GET"])
+@app.route("/matchEng", methods=["POST"])
 def matchEng():
     try: 
-        char = request.args.get("char")
-        result = select_word(char=char) # trả về dưới dạng dict
-        
+        data = request.get_json()
+        if data:
+            char = data["char"]
+            location = data["location"]
+            if location == "first":
+                result = selectFirst(charFirst=char)
+            else:
+                result = selectOut(charOut=char)
+        else: 
+            return jsonify({"message": "Error !"}), 500
+
+
         if not result:
-            return jsonify({"message": "Word not found"}), 400
-    
+            return jsonify(result), 400
         return jsonify(result), 200
     except: 
         return jsonify({"message": "Error !"}), 500
