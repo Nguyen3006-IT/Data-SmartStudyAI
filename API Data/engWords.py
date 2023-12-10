@@ -35,7 +35,7 @@ def selectFirst(charFirst:str):
     return data if data else None
 
 
-def selectOut(charOut:str):
+def selectLast(charOut:str):
     connection = sqlite3.connect("Vocabulary.db", check_same_thread=False)
     cur = connection.cursor()
     

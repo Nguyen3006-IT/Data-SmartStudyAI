@@ -1,7 +1,7 @@
 from flask import Flask, request, jsonify
 from irregular import irregular_search
 from chemistry import chemistry_search
-from engWords import find_word, selectFirst, selectOut
+from engWords import find_word, selectFirst, selectLast
 
 app = Flask("__name__")
 
@@ -62,7 +62,7 @@ def matchEng():
             if location == "first":
                 result = selectFirst(charFirst=char)
             else:
-                result = selectOut(charOut=char)
+                result = selectLast(charOut=char)
         else: 
             return jsonify({"message": "Error !"}), 500
 
