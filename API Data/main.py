@@ -2,6 +2,7 @@ from flask import Flask, request, jsonify
 from irregular import irregular_search
 from chemistry import chemistry_search
 from engWords import find_word, selectFirst, selectLast
+from connectWord import Matching
 
 app = Flask("__name__")
 
@@ -51,7 +52,6 @@ def vocabulary():
         return jsonify({"message": "Error !"}), 500
 
 
-
 @app.route("/matchEng", methods=["POST"])
 def matchEng():
     try: 
@@ -73,6 +73,42 @@ def matchEng():
     except: 
         return jsonify({"message": "Error !"}), 500
 
+
+@app.route("/matchVie", methods=["GET"])
+def matchVie():
+    try:
+        data = request.get_json()
+        if data:
+            text = data["text"]
+            location = data["location"]
+            match = Matching()
+            if location.lower() == "first":
+                result = match.VieFirst(text=text)
+            else:
+                result = match.VieLast(text=text)
+        else:
+            return jsonify({"message": "Error !"}), 500
+        
+        if not result: 
+            return jsonify({"message": "Out of word"}), 400
+        
+        return jsonify(result), 200
+    except:
+        return jsonify({"message": "Error !"}), 500
+
+
+@app.route("/saveWords", methods=["POST"])
+def saveWords():
+    data = request.get_json().get("data")
+    if data:
+        match = Matching()
+        if data.isinstance(data, list):
+            return jsonify(match.addAllWords(data=data))
+        else:
+            return jsonify(match.addWord(word=data))
+
+    else:
+        return {"message": "Error !"}, 500
 
 #run
 if __name__ == "__main__":

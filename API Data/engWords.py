@@ -1,7 +1,7 @@
 import sqlite3, re
 
-def find_word(word:str):
-    word = re.sub('\([^)]*\)|[\W]', ' ', word)
+def find_word(word:str) -> dict:
+    word = re.sub('\([^)]*\)|[\W]', ' ', word.lower())
     word = re.sub('\s+', ' ', word)
     
     connection = sqlite3.connect("Vocabulary.db", check_same_thread=False)
@@ -18,7 +18,7 @@ def find_word(word:str):
     
     return 
 
-def selectFirst(charFirst:str):
+def selectFirst(charFirst:str) -> tuple:
     connection = sqlite3.connect("Vocabulary.db", check_same_thread=False)
     cur = connection.cursor()
     
@@ -35,7 +35,7 @@ def selectFirst(charFirst:str):
     return data if data else None
 
 
-def selectLast(charOut:str):
+def selectLast(charOut:str) -> tuple:
     connection = sqlite3.connect("Vocabulary.db", check_same_thread=False)
     cur = connection.cursor()
     
